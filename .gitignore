@@ -1,0 +1,16 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.idea
+data/codelist_subsets-test.xlsx
+data/codelists-test.xlsx
+data/define-oxygen-test.html
+data/define-saxon-test.html
+data/define-test.html
+data/SDTM-mapping-spec-14Oct2021.xlsx
+data/t1d-define.html
+data/variables_extended.xlsx
+data/variables_extended_save.xlsx
+data/variables_test.xlsx
