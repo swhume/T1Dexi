@@ -8,7 +8,7 @@ spreadsheet is complete, the xlsx2define2-1.py odmlib example program is used to
 Define-XML xml file.
 
 To generate the HTML rendering of the Define-XML using the define2-1.xls stylesheet follow the steps
-in [](this blog post once it's posted).
+in [Generating HTML from Define-XML](https://swhume.github.io/blog-2022-generate-html-from-xml.html).
 
 The scripts in this project are intended to be modified as needed to extract content from a mapping spreadsheet.
 As the mapping spreadsheet changes or decisions about what to include in the Define-XML change, the scripts
@@ -28,6 +28,12 @@ spreadsheet output path and filename. Both arguments have default settings so ar
 This application is based on the T1Dexi SDTM mapping spreadsheet and changes to the format of the spreadsheet
 or different spreadsheets may not work with this program.
 
+## Define-XML Implementation Notes
+Notes on the Define-XML specification for the T1Dexi study that complement the SDTM mapping specification can be 
+accessed in the [T1Dexi Define-XML CDISC wiki page](https://wiki.cdisc.org/display/~shume@cdisc.org/T1Dexi+Define-XML). 
+A high-level, graphical depiction of the process used to generate the Define-XML may be accessed in the 
+[Generate T1Dexi Define-XML wiki page](https://wiki.cdisc.org/display/~shume@cdisc.org/Generate+T1Dexi+Define-XML).
+
 ## Running map2codelists
 The map2codelists.py program generates the codelist metadata based used to generate codelists in Define-XML v2.1. 
 The codelists were stripped from the SDTM mapping spreadsheet and added to this program. This program looks up the 
@@ -37,7 +43,7 @@ of the terms are used. As with variables, by restricting the list of codelists g
 of the needed codelists. This is a command-line program with optional command-line arguments, as shown in the following
 example:
 
-'python map2codelists.py -a e9a7d1b9bf1a4036ae7b25533123456 -o ./path/to/codelists.xlsx'
+`python map2codelists.py -a e9a7d1b9bf1a4036ae7b25533123456 -o ./path/to/codelists.xlsx`
 
 The -a argument is the CDISC Library API Key. You will need to generate a CDISC Library API Key if you do not
 already have one. The -o argument is the odmlib metadata spreadsheet output path and filename. Both arguments 
@@ -48,7 +54,25 @@ SDTM mapping spreadsheet. If new CDISC CT codelists are added or codelists are r
 updated.
 
 ## Running map2subsets
-Coming soon...
+The map2subsets.py generates content for the ValueLevel, WhereClauses, and CodeLists worksheets in the T1Dexi odmlib
+metadata spreadsheet. The output spreadsheet produced includes the previously mentioned worksheets and this content
+can be pasted into the corresponding metadata worksheets. Content is pulled from the SDTM mapping spreadsheet, but the
+mapping spreadsheet doesn't contain all the necessary information in a way that can be processed in a straightforward 
+manner. The codelists dictionary defined in the program adds information needed to work with content from
+the mapping spreadsheet. If there are changes to the study that impact value level metadata this dictionary may need to
+be updated. Thus, creating the value level metadata and codelist subsets uses some manual steps to drive the automation,
+namely updating the codelists dictionary with updates to the value level metadata and codelist subsets in the mapping 
+spreadsheet.
+
+This is a command-line program with optional command-line arguments, as shown in the following example:
+
+`python map2variables -i ./path/to/mapping_spec.xlsx -o ./path/to/define-worksheets.xlsx`
+
+The -i argument is the path and filename for the SDTM mapping specification. The -o argument is the odmlib metadata
+spreadsheet output path and filename. Both arguments have default settings so are optional.
+
+This application is based on the T1Dexi SDTM mapping spreadsheet and changes to the format of the spreadsheet
+or different spreadsheets may not work with this program.
 
 ## Generating Define-XML using odmlib
 To generate the Define-XML v2.1 file from the odmlib metadata spreadsheet you will need to install odmlib 
@@ -73,6 +97,9 @@ conformance checks. To do this you'll need to expand the previously used command
 
 `-v -c -e ./data/odmlib-define-metadata.xlsx -d ./data/odmlib-test-define.xml 
 -s "./DefineV211/schema/cdisc-define-2.1/define2-1-0.xsd`
+
+## Define-XML Generation Process
+![Define-XML Generation Process](https://github.com/swhume/T1Dexi/blob/master/docs/define-xml-process.png?raw=true)
 
 ## Future Use
 For this project, we made every effort to maximize the use of existing content in the mapping spreadsheet.

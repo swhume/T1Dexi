@@ -20,10 +20,10 @@ package_date = "2021-12-17"
 package_standard = "sdtmct"
 
 # codelist OIDs created from c-codes referenced in the SDTM mapping spreadsheet
-codelists = list(set(["CL.C66728", "CL.C66781", "CL.C66731", "CL.C74457", "CL.C66790", "CL.C66729", "CL.C99079",
-                      "CL.C99079", "CL.C102580", "CL.C66789", "CL.C99079", "CL.C66742", "CL.C71113", "CL.C99079",
-                      "CL.C74559", "CL.C103330", "CL.C66789", "CL.C99079", "CL.C66741", "CL.C67153", "CL.C71148",
-                      "CL.C66770", "CL.C66789", "CL.C74456",  "CL.C99073", "CL.C99079", "CL.C78735", "CL.C71620"]))
+codelists = list(set(["CL.C66728", "CL.C66781", "CL.C66731", "CL.C74457", "CL.C66790", "CL.C99079",
+                      "CL.C99079", "CL.C102580", "CL.C99079", "CL.C66742", "CL.C71113", "CL.C99079",
+                      "CL.C74559", "CL.C103330", "CL.C99079", "CL.C66741", "CL.C67153", "CL.C71148",
+                      "CL.C66770", "CL.C99079", "CL.C71620"]))
 
 # labtests used to create lab test codelist subsets (only include the tests that are used)
 lab_test_codelists = {"test_code": "C65047", "test_name": "C67154", "test_codes": ["HBA1C"], "test_names": ["Hemoglobin A1C"]}
