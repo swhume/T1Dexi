@@ -230,7 +230,7 @@ def create_define_sheet(table, sheet_name, workbook, header_format):
 
 def process_map_sheet(sheet, domain, def_workbook, header_format):
     """
-
+    process the content in the SDTM mapping spreadsheet to generate the define-xml metadata worksheet
     :param sheet: SDTM mapping spreadsheet worksheet to parse
     :param domain: 2-letter domain abbreviation used to identify the domain for a variable
     :param def_workbook: obmlib define-xml workbook to add variables worksheet to
