@@ -22,6 +22,34 @@ format_class = ["Name", "Label", "Type", "Codelist", "Role", "Notes", "Core", "D
 # SDTM mapping spreadsheet worksheets to skip as they do not contain variables for a given domain
 worksheet_skip = ["T1Dexi SDTM Summary", "T1Dexi Tables", "Domains", "Sheet1"]
 
+# for variables like STUDYID and USUBJID - just define these variables once
+common_variables = ["STUDYID", "USUBJID", "SPDEVID"]
+
+# TODO FAML will have separarte datasets for meal, daily, item
+# key sequences for datasets
+key_sequence = {
+    "CM": ["STUDYID", "USUBJID", "CMTRT", "CMSTDTC"],
+    "DI": ["STUDYID", "SPDEVID", "DISEQ", "DIPARMCD"],
+    "DM": ["STUDYID", "USUBJID"],
+    "DX": ["STUDYID", "USUBJID", "DXTRT", "DXDTC"],
+    "FA": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
+    "FACM": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
+    "FADX": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
+    "FAML": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
+    "FALB": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
+    "FAPR": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
+    "LB": ["STUDYID", "USUBJID", "LBTESTCD", "LBDTC"],
+    "ML": ["STUDYID", "USUBJID", "MLTRT", "MLSTDTC"],
+    "NV": ["STUDYID", "USUBJID", "NVTESTCD", "NVDTC"],
+    "RELREC": ["STUDYID", "RDOMAIN", "USUBJID", "IDVAR", "IDVARVAL", "RELID"],
+    "PR": ["STUDYID", "USUBJID", "PRTRT", "PRSTDTC"],
+    "RP": ["STUDYID", "USUBJID", "RPTESTCD", "RPDTC"],
+    "SUPPDM": ["STUDYID", "RDOMAIN", "USUBJID", "IDVAR", "IDVARVAL", "QNAM"],
+    "QS": ["STUDYID", "USUBJID", "QSTESTCD", "QSDTC"],
+    "SC": ["STUDYID", "USUBJID", "SCTESTCD", "SCDTC"],
+    "VS": ["STUDYID", "USUBJID", "VSTESTCD", "VSDTC"]
+}
+
 # name and path of the input SDTM mapping spreadsheet and default -i CLI arg value - assumes child data dir
 excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-02Feb2022.xlsx')
 # name and path of the output odmlib variables spreadsheet and default -o CLI arg value - assumes child data dir
@@ -39,10 +67,15 @@ class Name:
         """
         if cell is None:
             cell = ""
-        row_dict["OID"] = "IT." + domain + "." + cell
+        if cell in common_variables:
+            row_dict["OID"] = "IT." + cell
+        else:
+            row_dict["OID"] = "IT." + domain + "." + cell
         row_dict["Variable"] = cell
         row_dict["Dataset"] = domain
         row_dict["Order"] = col_num + 1
+        if domain in key_sequence and cell in key_sequence[domain]:
+            row_dict["KeySequence"] = key_sequence[domain].index(cell) + 1
 
 
 class Label:
@@ -148,7 +181,8 @@ class DataType:
         elif cell == "datetime":
             row_dict["Data Type"] = "datetime"
         elif cell == "bit":
-            row_dict["Data Type"] = "boolean"
+            row_dict["Data Type"] = "text"
+            row_dict["Length"] = 1
         else:
             row_dict["Data Type"] = "text"
 
@@ -167,7 +201,8 @@ class Length:
                 row_dict["Length"] = cell
             else:
                 # sets default length value to 200 if none provided
-                row_dict["Length"] = 200
+                if not row_dict["Length"]:
+                    row_dict["Length"] = 200
         elif row_dict["Data Type"] == "integer":
             if cell:
                 row_dict["Length"] = cell

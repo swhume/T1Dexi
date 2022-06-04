@@ -20,22 +20,42 @@ package_date = "2021-12-17"
 package_standard = "sdtmct"
 
 # codelist OIDs created from c-codes referenced in the SDTM mapping spreadsheet
-codelists = list(set(["CL.C66728", "CL.C66781", "CL.C66731", "CL.C74457", "CL.C66790", "CL.C99079",
-                      "CL.C99079", "CL.C102580", "CL.C99079", "CL.C66742", "CL.C71113", "CL.C99079",
-                      "CL.C74559", "CL.C103330", "CL.C99079", "CL.C66741", "CL.C67153", "CL.C71148",
-                      "CL.C66770", "CL.C99079", "CL.C71620"]))
+codelists = list(set(["CL.C66731", "CL.C74457", "CL.C66790", "CL.C102580", "CL.C99079", "CL.C71148", "CL.C141665"]))
 
-# labtests used to create lab test codelist subsets (only include the tests that are used)
-lab_test_codelists = {"test_code": "C65047", "test_name": "C67154", "test_codes": ["HBA1C"], "test_names": ["Hemoglobin A1C"]}
-
-# placeholder for the unit codelist which should be replaced by unit subsets
-units_codelist = {"codelist": "C71620", "units": [""]}
+# codelist subset definitions - codelist OID and c-codes and submission values for each term in the subset
+codelist_subsets = [
+    {"oid": "CL.C66742", "terms": [{"c_code": "C49488", "sub_val": "Y"}]},
+    {"oid": "CL.C66728", "terms": [{"c_code": "C25629", "sub_val": "BEFORE"}, {"c_code": "C53279", "sub_val": "ONGOING"}]},
+    {"oid": "CL.C66781", "terms": [{"c_code": "C29848", "sub_val": "YEARS"}]},
+    {"oid": "CL.C71620", "terms": [{"c_code": "C44278", "sub_val": "U"}, {"c_code": "NA", "sub_val": "U/hr"},
+                                   {"c_code": "C25301", "sub_val": "DAYS"}, {"c_code": "C172604", "sub_val": "cup eq"},
+                                   {"c_code": "C161487", "sub_val": "DRINK"}, {"c_code": "C48155", "sub_val": "g"},
+                                   {"c_code": "C67194", "sub_val": "kcal"}, {"c_code": "C28253", "sub_val": "mg"},
+                                   {"c_code": "C172605", "sub_val": "oz eq"}, {"c_code": "C184720", "sub_val": "SERVING"},
+                                   {"c_code": "C25613", "sub_val": "%"}, {"c_code": "C67015", "sub_val": "mg/dL"},
+                                   {"c_code": "C170633", "sub_val": "days/wk"}, {"c_code": "C172603", "sub_val": "tsp eq"},
+                                   {"c_code": "C176381", "sub_val": "min/day"}]},
+    {"oid": "CL.C71113", "terms": [{"c_code": "C25473", "sub_val": "QD"}]},
+    {"oid": "CL.C74559", "terms": [{"c_code": "C17953", "sub_val": "EDULEVEL"}, {"c_code": "C154890", "sub_val": "INCMLVL"},
+                                   {"c_code": "NA", "sub_val": "HLTHINS"}]},
+    {"oid": "CL.C103330", "terms": [{"c_code": "C17953", "sub_val": "EDUCATION LEVEL"},
+                                    {"c_code": "C154890", "sub_val": "INCOME LEVEL"},
+                                    {"c_code": "NA", "sub_val": "HEALTH INSURANCE"}]},
+    {"oid": "CL.C66741", "terms": [{"c_code": "C25347", "sub_val": "HEIGHT"}, {"c_code": "C25208", "sub_val": "WEIGHT"},
+                                   {"c_code": "C49677", "sub_val": "HR"}, {"c_code": "NA", "sub_val": "HRM"}]},
+    {"oid": "CL.C67153", "terms": [{"c_code": "C25347", "sub_val": "Height"}, {"c_code": "C25208", "sub_val": "Weight"},
+                                   {"c_code": "C49677", "sub_val": "Heart Rate"}, {"c_code": "NA", "sub_val": "Heart Rate, Mean"}]},
+    {"oid": "CL.C66770", "terms": [{"c_code": "C48500", "sub_val": "in"}, {"c_code": "C48531", "sub_val": "lbs"},
+                                   {"c_code": "C49673", "sub_val": "beats/min"}]},
+    {"oid": "CL.C65047", "terms": [{"c_code": "C64849", "sub_val": "HBA1C"}, {"c_code": "C105585", "sub_val": "GLUC"}]},
+    {"oid": "CL.C67154", "terms": [{"c_code": "C64849", "sub_val": "Hemoglobin A1C"}, {"c_code": "C105585", "sub_val": "Glucose"}]}
+]
 
 # OIDs for codelist subsets for domain - each codelist includes the term for one domain
 domain_codelists = ["CL.DOMAIN.VS", "CL.DOMAIN.SC", "CL.DOMAIN.QS", "CL.DOMAIN.RP", "CL.DOMAIN.PR", "CL.DOMAIN.ML",
                 "CL.DOMAIN.LB", "CL.DOMAIN.FA", "CL.DOMAIN.FACM", "CL.DOMAIN.FADX", "CL.DOMAIN.FAML",
                 "CL.DOMAIN.FAPR", "CL.DOMAIN.DX", "CL.DOMAIN.DM", "CL.DOMAIN.DI",
-                "CL.DOMAIN.CM"]
+                "CL.DOMAIN.CM", "CL.DOMAIN.MH", "CL.DOMAIN.RELREC", "CL.DOMAIN.SUPPDM"]
 
 # codelist tab column headers that match the odmlib spreadsheet
 header = ["OID", "Name", "NCI Codelist Code", "Data Type", "Order", "Term", "NCI Term Code", "Decoded Value",
@@ -149,54 +169,64 @@ def get_domain_term(cl, domain):
     return term
 
 
-def create_lab_codelist_subsets(worksheet, row_nbr, api_key):
+def create_defined_subsets(worksheet, row_nbr, api_key):
     """
-    generate codelist subsets for lab test codes and test names
-    :param worksheet: the odmlib worksheet to write the codelist subset terms to
-    :param row_nbr: the integer row number that indicates where to start appending term rows
-    :param api_key: string CDISC Library API key
-    :return: integer row number that indicates where to start appending the next terms
+    generate codelist subsets based on the codelist_subset dictionary created from the mapping spreadsheet
+    :param worksheet: the Excel worksheet to write the codelist subset values to
+    :param row_nbr: the current row number in the worksheet (start writing from this row an retrun incremented value)
+    :param api_key: the Library API key needed to authenticate access to retrieve the codelist
+    :return: integer: the incremented row_nbr to indicate the current row in the worksheet
     """
-    row_nbr = create_codelist_subset(worksheet, row_nbr, lab_test_codelists["test_code"],
-                                     lab_test_codelists["test_codes"], api_key)
-    row_nbr = create_codelist_subset(worksheet, row_nbr, lab_test_codelists["test_name"],
-                                     lab_test_codelists["test_names"], api_key)
-    print(f"added lab test code and test name codelist subsets...")
-    return row_nbr
-
-
-def create_codelist_subset(worksheet, row_nbr, c_code, submission_values, api_key):
-    """
-    generate a codelist subset given the codelist c-code and the list of submission values to include in the subset
-    :param worksheet: odmlib worksheet object to write the codelist subset terms to
-    :param row_nbr: integer row number that indicates where to begin appending new codelist terms
-    :param c_code: string concept code for the codelist to subset
-    :param submission_values: list of submission values that will represent the terms included in the subset
-    :param api_key: string CDISC Library API key
-    :return: integer row number that indicates where to start appending the next terms to the worksheet
-    """
-    endpoint = "/mdr/ct/packages/" + package_standard + "-" + package_date + "/codelists/" + c_code
-    cl = get_codelist_from_library(endpoint, api_key)
-    order_nbr = 1
+    cl_count = 0
     rows = []
-    for term in cl["terms"]:
-        if term["submissionValue"] not in submission_values:
-            continue
-        row = {key: "" for key in header}
-        row["OID"] = "CL." + c_code
-        row["Name"] = cl["submissionValue"]
-        row["NCI Codelist Code"] = c_code
-        row["Data Type"] = "text"
-        row["Order"] = order_nbr
-        row["Term"] = term["submissionValue"]
-        row["NCI Term Code"] = term["conceptId"]
-        row["Decoded Value"] = term["preferredTerm"]
-        row["Comment"] = ""
-        row["IsNonStandard"] = ""
-        row["StandardOID"] = "STD.1"
-        order_nbr += 1
-        rows.append(row)
+    for subset in codelist_subsets:
+        c_code = subset["oid"].split(".")[1]
+        # get the complete codelist from the Library to use to populate the subset terms
+        endpoint = "/mdr/ct/packages/" + package_standard + "-" + package_date + "/codelists/" + c_code
+        cl = get_codelist_from_library(endpoint, api_key)
+        order_nbr = 1
+        cl_count += 1
+        # find the non-standard terms that extend a codelist and have a c-code == "NA"
+        submission_values = [term_dict["sub_val"] for term_dict in subset["terms"] if term_dict["c_code"] == "NA"]
+        term_c_codes = [term_dict["c_code"] for term_dict in subset["terms"]]
+        is_term_found = False
+        # populate fields of the subset term from the Library content
+        for term in cl["terms"]:
+            if term["conceptId"] in term_c_codes:
+                row = {key: "" for key in header}
+                row["OID"] = "CL." + c_code
+                row["Name"] = cl["submissionValue"]
+                row["NCI Codelist Code"] = c_code
+                row["Data Type"] = "text"
+                row["Order"] = order_nbr
+                row["Term"] = term["submissionValue"]
+                row["NCI Term Code"] = term["conceptId"]
+                row["Decoded Value"] = term["preferredTerm"]
+                row["Comment"] = ""
+                row["IsNonStandard"] = ""
+                row["StandardOID"] = "STD.3"
+                is_term_found = True
+                order_nbr += 1
+                rows.append(row)
+        # process non-standard terms that extend a codelist
+        for sv in submission_values:
+            row = {key: "" for key in header}
+            row["OID"] = "CL." + c_code
+            row["Name"] = cl["submissionValue"]
+            row["NCI Codelist Code"] = c_code
+            row["Data Type"] = "text"
+            row["Order"] = order_nbr
+            row["Term"] = sv
+            row["Comment"] = ""
+            row["IsNonStandard"] = "Yes"
+            row["StandardOID"] = ""
+            is_term_found = True
+            order_nbr += 1
+            rows.append(row)
+        if not is_term_found:
+            print(f"No terms found in {c_code}")
     row_nbr = write_codelist_to_xls(worksheet, rows, row_nbr)
+    print(f"added {cl_count} defined subsets...")
     return row_nbr
 
 
@@ -264,11 +294,8 @@ def main():
     # add domain codelists
     row_nbr = create_domain_codelist_subsets(worksheet, row_nbr, args.api_key)
 
-    # add lab test name and lab test code subsets
-    row_nbr = create_lab_codelist_subsets(worksheet, row_nbr, args.api_key)
-
-    # add units subset
-    # add process a units subset
+    # add process codelist subsets
+    row_nbr = create_defined_subsets(worksheet, row_nbr, args.api_key)
 
     workbook.close()
 
