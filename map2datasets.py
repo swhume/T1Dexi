@@ -4,6 +4,13 @@ from openpyxl import load_workbook
 import xlsxwriter as XLS
 import requests
 
+"""
+map2datasets.py extracts the variables from the mapping spreadsheet and generates a Define-XML v2.1 metadata worksheet
+for datasets.
+Example Cmd-line (optional args):
+    python map2datasets -i ./path/to/mapping_spec.xlsx -o ./path/to/datasets_ws.xlsx
+"""
+
 # odmlib worksheet column headers to variables
 header = ["OID", "Dataset", "Description", "Class", "Structure", "Purpose", "Repeating",
           "Reference Data",	"Comment", "IsNonStandard", "StandardOID", "HasNoData"]
@@ -17,7 +24,8 @@ class_order = ["TRIAL DESIGN", "SPECIAL PURPOSE", "INTERVENTIONS", "EVENTS", "FI
                "RELATIONSHIP", "STUDY REFERENCE"]
 
 # name and path of the input SDTM mapping spreadsheet and default -i CLI arg value - assumes child data dir
-excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-02Feb2022.xlsx')
+# excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-02Feb2022.xlsx')
+excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-20220406.xlsx')
 # name and path of the output odmlib variables spreadsheet and default -o CLI arg value - assumes child data dir
 excel_define_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'datasets_test.xlsx')
 
@@ -67,6 +75,11 @@ def get_endpoint_from_library(endpoint, api_key):
 
 
 def load_class_names(api_key):
+    """
+    lookup the class names for the datasets in SDTMIG 3.3
+    :param api_key: string; API key needed to authenticate and access the CDISC Library API
+    :return: dictionary of class names associated with the dataset
+    """
     endpoint = "/mdr/sdtmig/3-3/classes"
     classes = get_endpoint_from_library(endpoint, api_key)
     class_sub_vals = lookup_class_sub_values(api_key)
@@ -78,6 +91,12 @@ def load_class_names(api_key):
 
 
 def find_class_match(name, sub_vals):
+    """
+    find the Define-XML CT term based on the class name for the dataset
+    :param name: string; name of the class associated with a dataset in the Library
+    :param sub_vals: dictionary of Define-XML class terms (submission values) to look-up by name
+    :return: string; return the Define-XML Class term
+    """
     for sv, synonyms in sub_vals.items():
         if name in synonyms or name.upper() in synonyms or name.upper() == sv:
             return sv
@@ -87,6 +106,11 @@ def find_class_match(name, sub_vals):
 
 
 def lookup_class_sub_values(api_key):
+    """
+    lookup Define-XML class controlled terminology
+    :param api_key: string; API key to access the Library API
+    :return: dictionary with the synonyms needed to look-up the Define-XML CT Class term
+    """
     endpoint = "/mdr/ct/packages/define-xmlct-2021-12-17/codelists/C103329"
     cl = get_endpoint_from_library(endpoint, api_key)
     class_sub_vals = {}
@@ -96,6 +120,11 @@ def lookup_class_sub_values(api_key):
 
 
 def lookup_domain_endpoint(domain):
+    """
+    given the domain short name build the endpoint to retrieve the dataset metadata from the Library
+    :param domain: string; short domain name
+    :return: string; endpoint URL
+    """
     if domain in ["DX", "DI"]:
         endpoint = "/mdr/sdtmig/md-1-1/datasets/" + domain
     elif "SUPP" in domain:
@@ -144,6 +173,7 @@ def process_map_sheet(sheet, def_workbook, header_format, api_key):
         row_dict["HasNoData"] = ""
         rows.append(row_dict)
         row_nbr += 1
+        # make sure all domains are listed in the Domains Used table as blank cells will break out of the loop
         domain = sheet["A" + str(row_nbr)].value
     ordered_rows = sort_domain_order(rows)
     create_define_sheet(ordered_rows, sheet.title, def_workbook, header_format)
@@ -170,8 +200,6 @@ def sort_by_dataset_name(rows):
             if row["Dataset"] == name:
                 sorted_table.append(row)
     return sorted_table
-
-
 
 
 def set_cmd_line_args():

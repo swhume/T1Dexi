@@ -9,7 +9,8 @@ map2subsets.py generates content for the ValueLevel, WhereClauses, and CodeLists
 metadata spreadsheet. The output spreadsheet produced includes the previously mentioned worksheets and this content
 can be pasted into the corresponding metadata worksheets. Content is pulled from the SDTM mapping spreadsheet, but the
 mapping spreadsheet doesn't contain all the necessary information in a way that can be processed in a straightforward 
-manner. The codelists dictionary listed below adds information needed to work with content from the mapping spreadsheet. 
+manner. The content is found in the CODELIST - VARIABLE NAME columns after the variable name columns.
+The codelists dictionary listed below adds information needed to work with content from the mapping spreadsheet. 
 If there are changes to the study that impact value level metadata this dictionary may need to
 be updated.
 
@@ -19,22 +20,24 @@ Example Cmd-line (optional args):
 
 
 # --- since splitting on ", " could also get rid of the space in the Masters codelist
+# codelists are those codelists documented in columns after the variables (CODELIST - VARIABLE NAME)
+# TODO document dictionary structure
 codelists = {"DM.RACE": {"IsNonStandard": ["C74457"], "VLM": "No", "type": ["text"], "whereclause": []},
              "DM.ETHNICITY": {"IsNonStandard": ["C66790"], "VLM": "No", "type": ["text"], "whereclause": []},
              "DX.DXTRT": {"IsNonStandard": ["Yes"], "VLM": "No", "type": ["text"], "whereclause": []},
              "FA.FAORRES": {"IsNonStandard": ["Yes", "Yes", "Yes", "Yes", "Yes"], "VLM": "Yes",
                             "type": ["text", "text", "text", "text", "text"],
-                            "whereclause": [{"variable": "FATESDTCD", "comparator": "EQ", "value": "AGE"},
-                                            {"variable": "FATESDTCD", "comparator": "EQ", "value": "SICKTODY"},
-                                            {"variable": "FATESDTCD", "comparator": "EQ", "value": "INSCHFL"},
-                                            {"variable": "FATESDTCD", "comparator": "EQ", "value": "STRESTDY"},
-                                            {"variable": "FATESDTCD", "comparator": "EQ", "value": "SLEEPQLT"}
+                            "whereclause": [{"variable": "FATESTCD", "comparator": "EQ", "value": "AGE"},
+                                            {"variable": "FATESTCD", "comparator": "EQ", "value": "SICKTODY"},
+                                            {"variable": "FATESTCD", "comparator": "EQ", "value": "INSCHFL"},
+                                            {"variable": "FATESTCD", "comparator": "EQ", "value": "STRESTDY"},
+                                            {"variable": "FATESTCD", "comparator": "EQ", "value": "SLEEPQLT"}
                                         ]
                             },
-             "FADX.FAOBJ": {"IsNonStandard": ["Yes", "Yes", "No"], "VLM": "Yes", "type": ["text", "text", "integer"],
+             "FADX.FAORRES": {"IsNonStandard": ["Yes", "Yes", "No"], "VLM": "Yes", "type": ["text", "text", "integer"],
                               "whereclause": [{"variable": "FAOBJ", "comparator": "EQ", "value": "INSULIN PUMP OR CLOSED LOOP"},
                                             {"variable": "FAOBJ", "comparator": "EQ", "value": "CGM"},
-                                            {"variable": "FAOBJ", "comparator": "EQ", "value": "CGM Use Last Month"}
+                                            {"variable": "FAOBJ", "comparator": "EQ", "value": "CGM USE LAST MONTH"}
                                         ]
                               },
              "FADX.DISINSEX": {"IsNonStandard": ["Yes"], "VLM": "No", "type": ["text"], "whereclause": []},
@@ -44,11 +47,38 @@ codelists = {"DM.RACE": {"IsNonStandard": ["C74457"], "VLM": "No", "type": ["tex
                             "whereclause": [{"variable": "SCTESTCD", "comparator": "EQ", "value": "EDULEVEL"},
                                             {"variable": "SCTESTCD", "comparator": "EQ", "value": "INCMLVL"}
                                             ]
-                            }
-            }
+                            },
+             "QS.TESTCD": {"IsNonStandard": ["C141665", "Yes", "Yes"], "VLM": "Yes", "type": ["text", "text", "text"],
+                           "whereclause": [{"variable": "QSCAT", "comparator": "EQ", "value": "IPAQ SHORT - SELF ADMINISTERED VERSION"},
+                                           {"variable": "QSCAT", "comparator": "EQ", "value": "CLARK HYPOGLYCEMIA UNAWARENESS SURVEY SELF ADMINISTERED"},
+                                           {"variable": "QSCAT", "comparator": "EQ", "value": "PITTSBURG SLEEP QUALITY INDEX"}
+                           ],
+                           "subset_terms": ["IPA0401, IPA0402, IPA0403, IPA0404, IPA0405, IPA0406, IPA0407",
+                                            "CHU01, CHU02, CHU03, CHU04, CHU05, CHU06, CHU07, CHU08",
+                                            "PSQI01, PSQI02, PSQI03, PSQI04, PSQI05A, PSQI05B, PSQI05C, PSQI05D, PSQI05E, PSQI05F, PSQI05G, PSQI05H, PSQI05I, PSQI05KJA, PSQI05JB, PSQI06, PSQI07, PSQI08, PSQI09"]
+                           },
+             "QS.TEST": {"IsNonStandard": ["C141664", "Yes", "Yes"], "VLM": "Yes", "type": ["text", "text", "text"],
+                           "whereclause": [{"variable": "QSCAT", "comparator": "EQ", "value": "IPAQ SHORT - SELF ADMINISTERED VERSION"},
+                                           {"variable": "QSCAT", "comparator": "EQ", "value": "CLARK HYPOGLYCEMIA UNAWARENESS SURVEY SELF ADMINISTERED"},
+                                           {"variable": "QSCAT", "comparator": "EQ",  "value": "PITTSBURG SLEEP QUALITY INDEX"}
+                                           ],
+                           "subset_terms": ["IPA04-Days Vigorous Physical Activities, IPA04-Vigorous Physical Hr & Min per Day, \
+IPA04-Days Moderate Physical Activities, IPA04-Moderate Physical Hr & Min per Day, IPA04-Days Walk at Least 10 Minutes, \
+IPA04-Walking Hr & Min per Day, IPA04-Sitting Weekday Hr & Min per Day", "CHU01-Category Best Describes You, \
+CHU01-Lost Some Symptoms Blood Sugar Low, CHU01-Moderate Hypo Espisodes-P6M, CHU01-Severe Hypo Episodes-P1Y, \
+CHU01-<70 mg/dL w/ Symptoms-P1M, CHU01-<70 mg/dL w/o  Symptoms-P1M, CHU01-How Low Blood Sug Before Symptoms, \
+CHU01-Extent Can Tell Blood Sugar is Low", "PSPSQI01-Time Usually Go To Bed-P1M, PSQI01-Minutes Taken to Fall Asleep-P1M, \
+PSQI01-Time Usually Wake Up-P1M, PSQI01-Hours Actual Sleep at Night-P1M, PSPSQI01-Can't Get to Sleep in 30 Mins-P1M, \
+PSQI01-Wake up Mid Night Early Morn-P1M, PSQI01-Have to Use Bathroom-P1M, PSQI01-Cannot Breathe  Comfortably-P1M, \
+PSQI01-Cough or Snore Loudly-P1M, PSQI01-Feel Too Cold-P1M, PSQI01-Feel Too Hot-P1M, PSQI01-Have Bad Dreams-P1M, \
+PSQI01-Have Pain-P1M, PSQI01-Trouble Sleep Other reason(s)-P1M, PSQI01-Describe Other reason(s)-P1M, \
+PSQI01-Sleep Medication-P1M, PSQI01-Trouble Staying Awake Social-P1M, PSQI01-Problem Keeping Up Enthusiasm-P1M, \
+PSQI01-Rate Overall Sleep Quality-P1M"]
+                           }
+             }
 
 worksheet_skip = ["T1Dexi SDTM Summary", "T1Dexi Tables", "Domains", "Sheet1"]
-excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-02Feb2022.xlsx')
+excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-20220406.xlsx')
 subset_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'cl_subsets.json')
 excel_define_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'codelist_subsets-test.xlsx')
 
@@ -88,7 +118,8 @@ def process_map_sheet(sheet, domain):
                     # if more than one subset then have VLM and must lookup testcds
             print(f"found {len(subset_codes)} subsets for {var_name} in domain {domain}")
             codelists[domain + "." + var_name]["domain"] = domain
-            codelists[domain + "." + var_name]["subset_terms"] = subset_codes
+            if subset_codes:
+                codelists[domain + "." + var_name]["subset_terms"] = subset_codes
 
 
 def process_codelists():
@@ -107,7 +138,7 @@ def process_codelists():
                 row["OID"] = "CL." + domain + "." + variable
                 row["Name"] = "Codelist for " + domain + " " + variable
             else:
-                wc_value = cl["whereclause"][idx]["value"].replace(" ", "-")
+                wc_value = generate_wc_name(cl["whereclause"][idx]["value"])
                 row["OID"] = "CL." + domain + "." + variable + "." + wc_value
                 row["Name"] = "Codelist for " + domain + " " + variable + " where " + wc_value
             if len(cl["IsNonStandard"][idx]) > 3:
@@ -179,10 +210,10 @@ def process_where_clauses():
             row = {key: "" for key in wc_header}
             if cl["VLM"] == "No":
                 continue
-            wc_value = wc["value"].replace(" ", "-")
+            wc_value = generate_wc_name(wc["value"])
             row["OID"] = "WC." + domain + "." + variable + "." + wc_value
             row["Dataset"] = domain
-            row["Variable"] = variable
+            row["Variable"] = wc["variable"]
             row["Comparator"] = wc["comparator"]
             row["Value"] = wc["value"]
             row["Comment"] = ""
@@ -202,7 +233,7 @@ def process_vlm():
             row = {key: "" for key in wc_header}
             if cl["VLM"] == "No":
                 continue
-            wc_value = wc["value"].replace(" ", "-")
+            wc_value = generate_wc_name(wc["value"])
             row["Where Clause"] = "WC." + domain + "." + variable + "." + wc_value
             row["ItemOID"] = "IT." + domain + "." + variable + "." + wc_value
             row["OID"] = "VL." + domain + "." + variable
@@ -235,6 +266,13 @@ def process_vlm():
             row["Comment"] = ""
             rows.append(row)
     return rows
+
+
+def generate_wc_name(wc_name):
+    wc_name_nodash = wc_name.replace("-", " ")
+    wc_name_nodash = " ".join(wc_name_nodash.split())
+    wc_name_value = wc_name_nodash.replace(" ", "-")
+    return wc_name_value
 
 
 def write_codelist_to_xls(worksheet, rows, header, row_nbr=0):

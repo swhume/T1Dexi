@@ -10,6 +10,7 @@ for variables.
 Example Cmd-line (optional args):
     python map2variables -i ./path/to/mapping_spec.xlsx -o ./path/to/variables_ws.xlsx
 """
+# TODO add Value List to VLM variable definitions?
 
 # odmlib worksheet column headers to variables
 header = ["OID", "Order", "Dataset", "Variable", "Label", "Data Type", "Length", "Significant Digits",
@@ -25,21 +26,22 @@ worksheet_skip = ["T1Dexi SDTM Summary", "T1Dexi Tables", "Domains", "Sheet1"]
 # for variables like STUDYID and USUBJID - just define these variables once
 common_variables = ["STUDYID", "USUBJID", "SPDEVID"]
 
-# TODO FAML will have separarte datasets for meal, daily, item
 # key sequences for datasets
 key_sequence = {
-    "CM": ["STUDYID", "USUBJID", "CMTRT", "CMSTDTC"],
+    "CM": ["STUDYID", "USUBJID", "CMTRT"],
     "DI": ["STUDYID", "SPDEVID", "DISEQ", "DIPARMCD"],
     "DM": ["STUDYID", "USUBJID"],
     "DX": ["STUDYID", "USUBJID", "DXTRT", "DXDTC"],
     "FA": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
     "FACM": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
     "FADX": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
-    "FAML": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
+    "FAML_meal": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
+    "FAML_daily": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
+    "FAML_item": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
     "FALB": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
     "FAPR": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
     "LB": ["STUDYID", "USUBJID", "LBTESTCD", "LBDTC"],
-    "ML": ["STUDYID", "USUBJID", "MLTRT", "MLSTDTC"],
+    "ML": ["STUDYID", "USUBJID", "MLTRT", "MLDTC"],
     "NV": ["STUDYID", "USUBJID", "NVTESTCD", "NVDTC"],
     "RELREC": ["STUDYID", "RDOMAIN", "USUBJID", "IDVAR", "IDVARVAL", "RELID"],
     "PR": ["STUDYID", "USUBJID", "PRTRT", "PRSTDTC"],
@@ -51,7 +53,8 @@ key_sequence = {
 }
 
 # name and path of the input SDTM mapping spreadsheet and default -i CLI arg value - assumes child data dir
-excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-02Feb2022.xlsx')
+# excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-02Feb2022.xlsx')
+excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-20220406.xlsx')
 # name and path of the output odmlib variables spreadsheet and default -o CLI arg value - assumes child data dir
 excel_define_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'variables_test.xlsx')
 
@@ -183,7 +186,12 @@ class DataType:
         elif cell == "bit":
             row_dict["Data Type"] = "text"
             row_dict["Length"] = 1
+        elif cell == "float":
+            row_dict["Data Type"] = "float"
+        elif cell == "decimal":
+            row_dict["Data Type"] = "decimal"
         else:
+            print(f"found missing data type for {cell}. Assigning text as a default")
             row_dict["Data Type"] = "text"
 
 

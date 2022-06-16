@@ -18,9 +18,9 @@ library_api_key = "e9a7d1b9bf1a4036ae7b25533a081565"
 # identifying details of the CT package used for this study
 package_date = "2021-12-17"
 package_standard = "sdtmct"
-
+# TODO ask if they want to include some derivations
 # codelist OIDs created from c-codes referenced in the SDTM mapping spreadsheet
-codelists = list(set(["CL.C66731", "CL.C74457", "CL.C66790", "CL.C102580", "CL.C99079", "CL.C71148", "CL.C141665"]))
+codelists = ["CL.C66731", "CL.C74457", "CL.C66790"]
 
 # codelist subset definitions - codelist OID and c-codes and submission values for each term in the subset
 codelist_subsets = [
@@ -38,24 +38,25 @@ codelist_subsets = [
     {"oid": "CL.C71113", "terms": [{"c_code": "C25473", "sub_val": "QD"}]},
     {"oid": "CL.C74559", "terms": [{"c_code": "C17953", "sub_val": "EDULEVEL"}, {"c_code": "C154890", "sub_val": "INCMLVL"},
                                    {"c_code": "NA", "sub_val": "HLTHINS"}]},
-    {"oid": "CL.C103330", "terms": [{"c_code": "C17953", "sub_val": "EDUCATION LEVEL"},
-                                    {"c_code": "C154890", "sub_val": "INCOME LEVEL"},
-                                    {"c_code": "NA", "sub_val": "HEALTH INSURANCE"}]},
+    {"oid": "CL.C103330", "terms": [{"c_code": "C17953", "sub_val": "Level of Education Attained"},
+                                    {"c_code": "C154890", "sub_val": "Income Level"},
+                                    {"c_code": "NA", "sub_val": "Health Insurance"}]},
     {"oid": "CL.C66741", "terms": [{"c_code": "C25347", "sub_val": "HEIGHT"}, {"c_code": "C25208", "sub_val": "WEIGHT"},
                                    {"c_code": "C49677", "sub_val": "HR"}, {"c_code": "NA", "sub_val": "HRM"}]},
     {"oid": "CL.C67153", "terms": [{"c_code": "C25347", "sub_val": "Height"}, {"c_code": "C25208", "sub_val": "Weight"},
                                    {"c_code": "C49677", "sub_val": "Heart Rate"}, {"c_code": "NA", "sub_val": "Heart Rate, Mean"}]},
-    {"oid": "CL.C66770", "terms": [{"c_code": "C48500", "sub_val": "in"}, {"c_code": "C48531", "sub_val": "lbs"},
+    {"oid": "CL.C66770", "terms": [{"c_code": "C48500", "sub_val": "in"}, {"c_code": "C48531", "sub_val": "LB"},
                                    {"c_code": "C49673", "sub_val": "beats/min"}]},
     {"oid": "CL.C65047", "terms": [{"c_code": "C64849", "sub_val": "HBA1C"}, {"c_code": "C105585", "sub_val": "GLUC"}]},
+    {"oid": "CL.C67154", "terms": [{"c_code": "C64849", "sub_val": "Hemoglobin A1C"}, {"c_code": "C105585", "sub_val": "Glucose"}]},
     {"oid": "CL.C67154", "terms": [{"c_code": "C64849", "sub_val": "Hemoglobin A1C"}, {"c_code": "C105585", "sub_val": "Glucose"}]}
 ]
 
 # OIDs for codelist subsets for domain - each codelist includes the term for one domain
 domain_codelists = ["CL.DOMAIN.VS", "CL.DOMAIN.SC", "CL.DOMAIN.QS", "CL.DOMAIN.RP", "CL.DOMAIN.PR", "CL.DOMAIN.ML",
-                "CL.DOMAIN.LB", "CL.DOMAIN.FA", "CL.DOMAIN.FACM", "CL.DOMAIN.FADX", "CL.DOMAIN.FAML",
-                "CL.DOMAIN.FAPR", "CL.DOMAIN.DX", "CL.DOMAIN.DM", "CL.DOMAIN.DI",
-                "CL.DOMAIN.CM", "CL.DOMAIN.MH", "CL.DOMAIN.RELREC", "CL.DOMAIN.SUPPDM"]
+                "CL.DOMAIN.LB", "CL.DOMAIN.FA", "CL.DOMAIN.FACM", "CL.DOMAIN.FADX", "CL.DOMAIN.FAML_meal",
+                "CL.DOMAIN.FAML_daily", "CL.DOMAIN.FAML_item", "CL.DOMAIN.FAPR", "CL.DOMAIN.DX", "CL.DOMAIN.DM",
+                "CL.DOMAIN.DI", "CL.DOMAIN.NV", "CL.DOMAIN.CM", "CL.DOMAIN.MH", "CL.DOMAIN.RELREC", "CL.DOMAIN.SUPPDM"]
 
 # codelist tab column headers that match the odmlib spreadsheet
 header = ["OID", "Name", "NCI Codelist Code", "Data Type", "Order", "Term", "NCI Term Code", "Decoded Value",
@@ -104,6 +105,7 @@ def process_library_codelist(cl_oid, cl):
         row["Decoded Value"] = term["preferredTerm"]
         row["Comment"] = ""
         row["IsNonStandard"] = ""
+        # TODO make a reference to this
         row["StandardOID"] = "STD.3"
         rows.append(row)
     return rows
