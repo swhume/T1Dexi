@@ -14,10 +14,22 @@ The scripts in this project are intended to be modified as needed to extract con
 As the mapping spreadsheet changes or decisions about what to include in the Define-XML change, the scripts
 used to extract content and load it into the odmlib metadata spreadsheet will also change.
 
+## Running map2datasets
+The map2datasets.py program extracts the dataset content from the mapping spreadsheet and generates a 
+Define-XML v2.1 metadata worksheet for datasets. This worksheet can then be copied into the odmlib metadata
+spreadsheet for the study. The program reads the Domains worksheet and pulls the short name and label from the first
+two columns. The program sorts the domains first by Class and then within Class alphabetically. This is a command-line
+program with optional command-line arguments, as shown in the following example:
+
+`python map2datasets -i ./path/to/mapping_spec.xlsx -o ./path/to/datasets_ws.xlsx`
+
+The -i argument is the path and filename for the SDTM mapping specification. The -o argument is the odmlib metadata
+
 ## Running map2variables
 The map2variables.py program extracts the variables from the mapping spreadsheet and generates a 
 Define-XML v2.1 metadata worksheet for variables. This worksheet can then be copied into the odmlib metadata
-spreadsheet for the study. This also makes it possible to transfer partial sets of variables. This is a command-line
+spreadsheet for the study. This also makes it possible to transfer partial sets of variables. The program contains the 
+variables that are dataset keys. It also defines common variables, like USUBJID, once. This is a command-line
 program with optional command-line arguments, as shown in the following example:
 
 `python map2variables -i ./path/to/mapping_spec.xlsx -o ./path/to/variables_ws.xlsx`
@@ -28,18 +40,13 @@ spreadsheet output path and filename. Both arguments have default settings so ar
 This application is based on the T1Dexi SDTM mapping spreadsheet and changes to the format of the spreadsheet
 or different spreadsheets may not work with this program.
 
-## Define-XML Implementation Notes
-Notes on the Define-XML specification for the T1Dexi study that complement the SDTM mapping specification can be 
-accessed in the [T1Dexi Define-XML CDISC wiki page](https://wiki.cdisc.org/display/~shume@cdisc.org/T1Dexi+Define-XML). 
-A high-level, graphical depiction of the process used to generate the Define-XML may be accessed in the 
-[Generate T1Dexi Define-XML wiki page](https://wiki.cdisc.org/display/~shume@cdisc.org/Generate+T1Dexi+Define-XML).
-
 ## Running map2codelists
-The map2codelists.py program generates the codelist metadata based used to generate codelists in Define-XML v2.1. 
+The map2codelists.py program generates the codelist metadata used to generate codelists in Define-XML v2.1. 
 The codelists were stripped from the SDTM mapping spreadsheet and added to this program. This program looks up the 
 CDISC CT codelists in the CDISC Library to generate the needed content including all the terms. There are some 
 special cases that are also addressed such as the domain abbreviation codelists and codelists subsets where a subset 
-of the terms are used. As with variables, by restricting the list of codelists generated you can generate a subset
+of the terms are used. The codelist subsets are specified in a dictionary in the code that will need to be updated
+if the subsets change. As with variables, by restricting the list of codelists generated you can generate a subset
 of the needed codelists. This is a command-line program with optional command-line arguments, as shown in the following
 example:
 
@@ -58,7 +65,8 @@ The map2subsets.py generates content for the ValueLevel, WhereClauses, and CodeL
 metadata spreadsheet. The output spreadsheet produced includes the previously mentioned worksheets and this content
 can be pasted into the corresponding metadata worksheets. Content is pulled from the SDTM mapping spreadsheet, but the
 mapping spreadsheet doesn't contain all the necessary information in a way that can be processed in a straightforward 
-manner. The codelists dictionary defined in the program adds information needed to work with content from
+manner. The content is found in the CODELIST - VARIABLE NAME columns after the variable name columns.
+The codelists dictionary defined in the program adds information needed to work with content from
 the mapping spreadsheet. If there are changes to the study that impact value level metadata this dictionary may need to
 be updated. Thus, creating the value level metadata and codelist subsets uses some manual steps to drive the automation,
 namely updating the codelists dictionary with updates to the value level metadata and codelist subsets in the mapping 
@@ -74,9 +82,15 @@ spreadsheet output path and filename. Both arguments have default settings so ar
 This application is based on the T1Dexi SDTM mapping spreadsheet and changes to the format of the spreadsheet
 or different spreadsheets may not work with this program.
 
+## Define-XML Implementation Notes
+Notes on the Define-XML specification for the T1Dexi study that complement the SDTM mapping specification can be 
+accessed in the [T1Dexi Define-XML CDISC wiki page](https://wiki.cdisc.org/display/~shume@cdisc.org/T1Dexi+Define-XML). 
+A high-level, graphical depiction of the process used to generate the Define-XML may be accessed in the 
+[Generate T1Dexi Define-XML wiki page](https://wiki.cdisc.org/display/~shume@cdisc.org/Generate+T1Dexi+Define-XML).
+
 ## Generating Define-XML using odmlib
 To generate the Define-XML v2.1 file from the odmlib metadata spreadsheet you will need to install odmlib 
-and then clone the odmlib_examples repsoitory. It's easiest to install odmlib from PyPI as follows:
+and then clone the odmlib_examples repository. It's easiest to install odmlib from PyPI as follows:
 
 `pip install odmlib`
 
