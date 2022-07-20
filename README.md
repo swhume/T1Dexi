@@ -106,11 +106,34 @@ To ensure everything installed correctly, test run xlsx2define2-1 using the foll
 
 You should find the odmlib-test-define.xml in the ./data directory.
 
-You can also request that after a Define-XML file is generated that it be schema validated and do some additional
+## Conformance Checking the Define-XML File
+When generating the Define-XML file you can request that it be schema validated and do some additional
 conformance checks. To do this you'll need to expand the previously used command-line:
 
 `-v -c -e ./data/odmlib-define-metadata.xlsx -d ./data/odmlib-test-define.xml 
 -s "./DefineV211/schema/cdisc-define-2.1/define2-1-0.xsd`
+
+An example program that provides a detailed overview of testing a Define-XML v2.1 file for conformance can
+be found in the [Snippets odmlib example programs in the file named validate_odm.py](https://github.com/swhume/odmlib_examples/blob/master/snippets/validate_define.py).
+This example demonstrates how to programmatically run a detailed conformance check on the Define-XML file. These
+conformance check include schema validation, but go well beyond the normal check. Especially useful to the Define-XML
+author are the Ref Def checks that examine each Ref Def to ensure each Def is unique, each Ref has a corresponding Def,
+and also highlight unreferenced (orphaned) Defs.
+
+As a simple snippet style example, this program does not yet have any command-line arguments and can be executed
+using as follows:
+
+`python validate_define.py`
+
+The Define-XML to be validated is defined at the top of the program.
+
+## Generating an HTML Rendering of Define-XML
+Using the style sheet provided with Define-XML v2.1 standard, the Define-XML file generated following the process specified
+above can be used to generate an HTML view of the content. This style sheet is open-source and widely used. To
+apply the style sheet to the Define-XML file, follow the detailed instructions outlined in this blog post titled
+[Generating HTML from Define-XML](https://swhume.github.io/blog-2022-generate-html-from-xml.html). The blog post
+describes the steps to install and apply the open-source Saxon XSLT processor to apply use the style sheet to generate
+the HTML file.
 
 ## Define-XML Generation Process
 ![Define-XML Generation Process](https://github.com/swhume/T1Dexi/blob/master/docs/define-xml-process.png?raw=true)
