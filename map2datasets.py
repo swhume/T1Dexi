@@ -130,7 +130,6 @@ def lookup_domain_endpoint(domain):
     elif "SUPP" in domain:
         endpoint = "/mdr/sdtmig/3-3/datasets/SUPPQUAL"
     elif "FA" in domain:
-        # TODO add FA secondary domain description
         endpoint = "/mdr/sdtmig/3-3/datasets/FA"
     else:
         endpoint = "/mdr/sdtmig/3-3/datasets/" + domain
@@ -168,7 +167,6 @@ def process_map_sheet(sheet, def_workbook, header_format, api_key):
         row_dict["Reference Data"] = "No"
         row_dict["Comment"] = ""
         row_dict["IsNonStandard"] = ""
-        # TODO configure standards
         row_dict["StandardOID"] = ""
         row_dict["HasNoData"] = ""
         rows.append(row_dict)
