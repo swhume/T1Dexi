@@ -10,7 +10,6 @@ for variables.
 Example Cmd-line (optional args):
     python map2variables -i ./path/to/mapping_spec.xlsx -o ./path/to/variables_ws.xlsx
 """
-# TODO add Value List to VLM variable definitions?
 
 # odmlib worksheet column headers to variables
 header = ["OID", "Order", "Dataset", "Variable", "Label", "Data Type", "Length", "Significant Digits",

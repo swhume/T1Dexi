@@ -21,7 +21,6 @@ Example Cmd-line (optional args):
 
 # --- since splitting on ", " could also get rid of the space in the Masters codelist
 # codelists are those codelists documented in columns after the variables (CODELIST - VARIABLE NAME)
-# TODO document dictionary structure
 codelists = {"DM.RACE": {"IsNonStandard": ["C74457"], "VLM": "No", "type": ["text"], "whereclause": []},
              "DM.ETHNICITY": {"IsNonStandard": ["C66790"], "VLM": "No", "type": ["text"], "whereclause": []},
              "DX.DXTRT": {"IsNonStandard": ["Yes"], "VLM": "No", "type": ["text"], "whereclause": []},
@@ -42,10 +41,14 @@ codelists = {"DM.RACE": {"IsNonStandard": ["C74457"], "VLM": "No", "type": ["tex
                               },
              "FADX.DISINSEX": {"IsNonStandard": ["Yes"], "VLM": "No", "type": ["text"], "whereclause": []},
              "FADX.SUSPINS": {"IsNonStandard": ["Yes"], "VLM": "No", "type": ["text"], "whereclause": []},
-             "LB.LBTMINT": {"IsNonStandard": ["Yes"], "VLM": "No", "type": ["text"], "whereclause": []},
              "SC.SCORRES": {"IsNonStandard": ["Yes", "Yes"], "VLM": "Yes", "type": ["text", "text"],
                             "whereclause": [{"variable": "SCTESTCD", "comparator": "EQ", "value": "EDULEVEL"},
                                             {"variable": "SCTESTCD", "comparator": "EQ", "value": "INCMLVL"}
+                                            ]
+                            },
+             "LB.LBORRES": {"IsNonStandard": ["Yes", "Yes"], "VLM": "Yes", "type": ["text", "text"],
+                            "whereclause": [{"variable": "LBTESTCD", "comparator": "EQ", "value": "HBA1C"},
+                                            {"variable": "LBTESTCD", "comparator": "EQ", "value": "GLUC"}
                                             ]
                             },
              "QS.TESTCD": {"IsNonStandard": ["C141665", "Yes", "Yes"], "VLM": "Yes", "type": ["text", "text", "text"],

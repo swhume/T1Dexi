@@ -18,7 +18,6 @@ library_api_key = "e9a7d1b9bf1a4036ae7b25533a081565"
 # identifying details of the CT package used for this study
 package_date = "2021-12-17"
 package_standard = "sdtmct"
-# TODO ask if they want to include some derivations
 # codelist OIDs created from c-codes referenced in the SDTM mapping spreadsheet
 codelists = ["CL.C66731", "CL.C74457", "CL.C66790"]
 
@@ -105,7 +104,6 @@ def process_library_codelist(cl_oid, cl):
         row["Decoded Value"] = term["preferredTerm"]
         row["Comment"] = ""
         row["IsNonStandard"] = ""
-        # TODO make a reference to this
         row["StandardOID"] = "STD.3"
         rows.append(row)
     return rows
