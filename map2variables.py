@@ -20,7 +20,7 @@ header = ["OID", "Order", "Dataset", "Variable", "Label", "Data Type", "Length",
 format_class = ["Name", "Label", "Type", "Codelist", "Role", "Notes", "Core", "DataType", "Length", "SignificantDigits"]
 
 # SDTM mapping spreadsheet worksheets to skip as they do not contain variables for a given domain
-worksheet_skip = ["T1Dexi SDTM Summary", "T1Dexi Tables", "Domains", "Sheet1"]
+worksheet_skip = ["T1Dexi SDTM Summary", "T1Dexi Tables", "Domains", "Sheet1", "FALB"]
 
 # for variables like STUDYID and USUBJID - just define these variables once
 common_variables = ["STUDYID", "USUBJID", "SPDEVID"]
@@ -37,8 +37,6 @@ key_sequence = {
     "FAML_meal": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
     "FAML_daily": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
     "FAML_item": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
-    "FALB": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
-    "FAPR": ["STUDYID", "USUBJID", "FATESTCD", "FAOBJ", "FADTC"],
     "LB": ["STUDYID", "USUBJID", "LBTESTCD", "LBDTC"],
     "ML": ["STUDYID", "USUBJID", "MLTRT", "MLDTC"],
     "NV": ["STUDYID", "USUBJID", "NVTESTCD", "NVDTC"],
