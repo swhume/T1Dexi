@@ -33,10 +33,8 @@ codelists = {"DM.RACE": {"IsNonStandard": ["C74457"], "VLM": "No", "type": ["tex
                                             {"variable": "FATESTCD", "comparator": "EQ", "value": "SLEEPQLT"}
                                         ]
                             },
-             "FADX.FAORRES": {"IsNonStandard": ["Yes", "Yes", "No"], "VLM": "Yes", "type": ["text", "text", "integer"],
-                              "whereclause": [{"variable": "FAOBJ", "comparator": "EQ", "value": "INSULIN PUMP OR CLOSED LOOP"},
-                                            {"variable": "FAOBJ", "comparator": "EQ", "value": "CGM"},
-                                            {"variable": "FAOBJ", "comparator": "EQ", "value": "CGM USE LAST MONTH"}
+             "FADX.FAORRES": {"IsNonStandard": ["Yes"], "VLM": "Yes", "type": ["text"],
+                              "whereclause": [{"variable": "FAOBJ", "comparator": "EQ", "value": "INSULIN PUMP OR CLOSED LOOP"}
                                         ]
                               },
              "FADX.DISINSEX": {"IsNonStandard": ["Yes"], "VLM": "No", "type": ["text"], "whereclause": []},
@@ -80,7 +78,7 @@ PSQI01-Rate Overall Sleep Quality-P1M"]
                            }
              }
 
-worksheet_skip = ["T1Dexi SDTM Summary", "T1Dexi Tables", "Domains", "Sheet1"]
+worksheet_skip = ["T1Dexi SDTM Summary", "T1Dexi Tables", "Domains", "Sheet1", "FALB"]
 excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-20220406.xlsx')
 subset_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'cl_subsets.json')
 excel_define_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'codelist_subsets-test.xlsx')
@@ -150,21 +148,24 @@ def process_codelists():
                 row["NCI Codelist Code"] = ""
             row["Data Type"] = cl["type"][idx]
             order_num = 1
-            for term in cl["subset_terms"][idx].split(", "):
-                row["Order"] = order_num
-                term_row = row.copy()
-                term_row["Term"] = term
-                term_row["NCI Term Code"] = ""
-                term_row["Decoded Value"] = ""
-                term_row["Comment"] = ""
-                if cl["IsNonStandard"][idx] == "Yes":
-                    term_row["IsNonStandard"] = "Yes"
-                    term_row["StandardOID"] = ""
-                else:
-                    term_row["IsNonStandard"] = ""
-                    term_row["StandardOID"] = "STD.2"
-                rows.append(term_row)
-                order_num += 1
+            try:
+                for term in cl["subset_terms"][idx].split(", "):
+                    row["Order"] = order_num
+                    term_row = row.copy()
+                    term_row["Term"] = term
+                    term_row["NCI Term Code"] = ""
+                    term_row["Decoded Value"] = ""
+                    term_row["Comment"] = ""
+                    if cl["IsNonStandard"][idx] == "Yes":
+                        term_row["IsNonStandard"] = "Yes"
+                        term_row["StandardOID"] = ""
+                    else:
+                        term_row["IsNonStandard"] = ""
+                        term_row["StandardOID"] = "STD.2"
+                    rows.append(term_row)
+                    order_num += 1
+            except:
+                print(f"error in term {idx}")
     return rows
 
 

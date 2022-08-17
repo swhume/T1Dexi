@@ -25,7 +25,8 @@ class_order = ["TRIAL DESIGN", "SPECIAL PURPOSE", "INTERVENTIONS", "EVENTS", "FI
 
 # name and path of the input SDTM mapping spreadsheet and default -i CLI arg value - assumes child data dir
 # excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-02Feb2022.xlsx')
-excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-20220406.xlsx')
+# excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-20220406.xlsx')
+excel_map_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'SDTM-mapping-spec-03Jun2022.xlsx')
 # name and path of the output odmlib variables spreadsheet and default -o CLI arg value - assumes child data dir
 excel_define_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'datasets_test.xlsx')
 
