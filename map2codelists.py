@@ -55,7 +55,7 @@ codelist_subsets = [
 domain_codelists = ["CL.DOMAIN.VS", "CL.DOMAIN.SC", "CL.DOMAIN.QS", "CL.DOMAIN.RP", "CL.DOMAIN.PR", "CL.DOMAIN.ML",
                 "CL.DOMAIN.LB", "CL.DOMAIN.FA", "CL.DOMAIN.FACM", "CL.DOMAIN.FADX", "CL.DOMAIN.FAML_meal",
                 "CL.DOMAIN.FAML_daily", "CL.DOMAIN.FAML_item", "CL.DOMAIN.FAPR", "CL.DOMAIN.DX", "CL.DOMAIN.DM",
-                "CL.DOMAIN.DI", "CL.DOMAIN.NV", "CL.DOMAIN.CM", "CL.DOMAIN.MH", "CL.DOMAIN.RELREC", "CL.DOMAIN.SUPPDM"]
+                "CL.DOMAIN.DI", "CL.DOMAIN.NV", "CL.DOMAIN.CM", "CL.DOMAIN.RELREC", "CL.DOMAIN.SUPPDM"]
 
 # codelist tab column headers that match the odmlib spreadsheet
 header = ["OID", "Name", "NCI Codelist Code", "Data Type", "Order", "Term", "NCI Term Code", "Decoded Value",

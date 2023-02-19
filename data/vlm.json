@@ -1,0 +1,114 @@
+{
+    "FA.FAORRES": {
+        "IsNonStandard": ["Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes",
+            "Yes", "Yes"],
+        "type": ["text", "text", "text", "text", "text", "text", "integer", "integer", "integer",
+            "integer", "integer", "integer", "integer", "integer", "integer"],
+        "whereclause": [
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["AGE"]},
+                {"variable": "FAOBJ", "comparator": "EQ", "value": ["DIABETES ONSET"]},
+                {"variable": "FAEVLINT", "comparator": "NOTIN", "value": ["Since Type 1 Diabetes Diagnosis", "-P12M"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["EPSDNUM"]},
+                {"variable": "FAOBJ", "comparator": "EQ", "value": ["HYPOGLYCEMIA"]},
+                {"variable": "FAEVLINT", "comparator": "EQ", "value": ["Since Type 1 Diabetes Diagnosis"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["EPSDNUM"]},
+                {"variable": "FAOBJ", "comparator": "EQ", "value": ["HYPOGLYCEMIA"]},
+                {"variable": "FAEVLINT", "comparator": "EQ", "value": ["-P12M"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["EPSDNUM"]},
+                {"variable": "FAOBJ", "comparator": "EQ", "value": ["HYPOGLYCEMIA"]},
+                {"variable": "FAEVLINT", "comparator": "NOTIN", "value": ["Since Type 1 Diabetes Diagnosis", "-P12M"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["EPSDNUM"]},
+                {"variable": "FAOBJ", "comparator": "EQ", "value": ["DIABETIC KETOACIDOSIS"]},
+                {"variable": "FAEVLINT", "comparator": "EQ", "value": ["Since Type 1 Diabetes Diagnosis"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["EPSDNUM"]},
+                {"variable": "FAOBJ", "comparator": "EQ", "value": ["DIABETIC KETOACIDOSIS"]},
+                {"variable": "FAEVLINT", "comparator": "EQ", "value": ["-P12M"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["EPSDNUM"]},
+                {"variable": "FAOBJ", "comparator": "EQ", "value": ["DIABETIC KETOACIDOSIS"]},
+                {"variable": "FAEVLINT", "comparator": "NOTIN", "value": ["Since Type 1 Diabetes Diagnosis", "-P12M"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["SDYDYSSK"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["SDYUSACT"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["STRESSLVL"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["STEPSTN"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["DISTANCE"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["TTIMPHAC"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["EXCINTSY"]}
+            ],
+            [
+                {"variable": "FATESTCD", "comparator": "EQ", "value": ["CALBURN"]}
+            ]
+        ]
+    },
+    "LB.LBORRES": {
+        "IsNonStandard": ["Yes", "Yes"],
+        "type": ["integer", "integer"],
+        "whereclause": [
+            [
+                {"variable": "LBTESTCD", "comparator": "EQ", "value": ["HBA1C"]}
+            ],
+            [
+                {"variable": "LBTESTCD", "comparator": "EQ", "value": ["GLUC"]}
+            ]
+        ]
+    },
+    "NV.NVSLPVAL": {
+        "IsNonStandard": ["Yes", "Yes", "Yes", "Yes", "Yes", "Yes"],
+        "type": ["float", "integer", "text", "integer", "integer", "float"],
+        "whereclause": [
+            [
+                {"variable": "NVTESTCD", "comparator": "EQ", "value": ["GARSTLVL"]},
+                {"variable": "NVCAT", "comparator": "EQ", "value": ["24-HOUR PHYSICAL MONITORING PERIOD"]}
+            ],
+            [
+                {"variable": "NVTESTCD", "comparator": "IN", "value": ["STRDUR", "RESTDUR", "ACTSTRDR", "LOWSTRDR",
+                "MEDSTRDR", "HISTRDR"]},
+                {"variable": "NVCAT", "comparator": "EQ", "value": ["24-HOUR PHYSICAL MONITORING PERIOD"]}
+            ],
+            [
+                {"variable": "NVTESTCD", "comparator": "EQ", "value": ["STRQUAL"]},
+                {"variable": "NVCAT", "comparator": "EQ", "value": ["24-HOUR PHYSICAL MONITORING PERIOD"]}
+            ],
+            [
+                {"variable": "NVTESTCD", "comparator": "IN", "value": ["UNMESSLP", "DPSLPDUR", "LTSLPDUR", "AWSLPDUR"]},
+                {"variable": "NVCAT", "comparator": "EQ", "value": ["Sleep"]}
+            ],
+            [
+                {"variable": "NVTESTCD", "comparator": "EQ", "value": ["GARSTLVL"]},
+                {"variable": "NVCAT", "comparator": "EQ", "value": ["Stress Level"]}
+            ],
+            [
+                {"variable": "NVTESTCD", "comparator": "EQ", "value": ["STBODBAT"]},
+                {"variable": "NVCAT", "comparator": "EQ", "value": ["Stress Body Battery"]}
+
+            ]
+        ]
+
+    }
+}
