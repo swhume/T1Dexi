@@ -147,6 +147,11 @@ def process_map_sheet(sheet, def_workbook, header_format, api_key):
     """
     class_names = load_class_names(api_key)
     domain = sheet["A3"].value
+    is_ap_domain = False
+    ap_domain = None
+    if domain[:2] == "AP":
+        is_ap_domain = True
+        ap_domain = domain[2:]
     rows = []
     row_nbr = 3
     while domain:
